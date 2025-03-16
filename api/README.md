@@ -45,37 +45,27 @@ Once the API is running, you can access the interactive API documentation at:
 
 ## Generating Frontend Types
 
-To ensure type safety in your frontend application, you can generate TypeScript types from the OpenAPI specification:
+To ensure type safety in your frontend application, you can generate TypeScript types directly from the running API:
 
-### 1. Download the OpenAPI Specification
+### Install openapi-typescript
 
-Once the API is running, download the OpenAPI JSON:
-
-```bash
-curl http://localhost:8000/openapi.json > openapi.json
-```
-
-### 2. Generate Types
-
-There are several tools you can use to generate TypeScript types from the OpenAPI specification:
-
-#### Using openapi-typescript
-
-Install the package:
+First, install the package if you haven't already:
 
 ```bash
 npm install -g openapi-typescript
 ```
 
-Generate types:
+### Generate Types with a Single Command
+
+Once the API is running, generate the types with a single command:
 
 ```bash
-openapi-typescript openapi.json -o src/api/types.ts
+npx openapi-typescript http://localhost:8000/openapi.json -o src/api/types.ts
 ```
 
-This will generate both types and API client functions.
+This command fetches the OpenAPI specification directly from the running API and generates TypeScript types in one step.
 
-### 3. Using the Generated Types
+### Using the Generated Types
 
 Import and use the generated types in your frontend code:
 
