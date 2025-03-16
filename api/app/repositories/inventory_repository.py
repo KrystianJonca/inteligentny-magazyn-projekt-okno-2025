@@ -119,6 +119,7 @@ class InventoryRepository:
             # Keep the record even if quantity becomes zero
 
             await db.commit()
+            await db.refresh(source_inventory)
 
             # Refresh destination inventory if it exists
             if destination_inventory:
