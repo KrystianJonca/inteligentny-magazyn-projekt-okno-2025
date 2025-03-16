@@ -7,9 +7,17 @@ up:
 down:
 	docker-compose down
 
+migrate:
+	docker-compose exec api alembic upgrade head
+
 restart: down up
 
 rebuild: down build up
+
+seed-db:
+	docker-compose exec api python seed_db.py
+
+run: up migrate seed-db
 
 logs:
 	docker-compose logs -f
@@ -19,9 +27,6 @@ shell:
 
 db-shell:
 	docker-compose exec db bash
-
-migrate:
-	docker-compose exec api alembic upgrade head
 
 revision:
 	docker-compose exec api alembic revision --autogenerate -m "$(message)"
