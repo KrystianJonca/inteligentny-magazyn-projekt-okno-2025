@@ -1,11 +1,18 @@
 from fastapi import FastAPI
 
+from app.core.middleware import setup_auth_middleware
+from app.routers.auth import router as auth_router
 
 app = FastAPI(
     title="Warehouse Management API",
     description="API for managing warehouses, items, and inventory",
     version="0.1.0",
 )
+
+# Include routers
+app.include_router(auth_router)
+# Set up authentication middleware
+setup_auth_middleware(app)
 
 
 @app.get("/")
