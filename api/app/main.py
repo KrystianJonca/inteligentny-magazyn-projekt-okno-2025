@@ -12,14 +12,13 @@ app = FastAPI(
     version="0.1.0",
 )
 
+setup_auth_middleware(app)
+
 # Include routers
 app.include_router(auth_router)
 app.include_router(warehouse_router)
 app.include_router(item_router)
 app.include_router(inventory_router)
-
-# Set up authentication middleware
-setup_auth_middleware(app)
 
 
 @app.get("/")

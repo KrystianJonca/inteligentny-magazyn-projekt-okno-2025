@@ -116,6 +116,9 @@ class WarehouseAPITest:
             self.test_user_registration()
             self.test_user_login()
 
+            # Test unauthenticated access
+            self.test_unauthenticated_access()
+
             # Test warehouse operations
             self.test_create_warehouse()
             self.test_get_warehouse()
@@ -234,6 +237,38 @@ class WarehouseAPITest:
         # Save the token for subsequent requests
         self.token = data["access_token"]
         print("✅ User login test passed")
+
+    def test_unauthenticated_access(self) -> None:
+        """Test that unauthenticated users cannot access protected endpoints."""
+        print("📋 Testing unauthenticated access to protected endpoints...")
+
+        # Temporarily store the token and set it to None to simulate unauthenticated access
+        temp_token = self.token
+        self.token = None
+
+        # Test the warehouses endpoint without authentication
+        endpoint = "/warehouses/"
+        method = "GET"
+        expected_status = 401  # Unauthorized
+
+        # Make request without authentication token
+        url = f"{self.base_url}{endpoint}"
+        headers = self.headers.copy()  # Headers without auth token
+
+        response = requests.request(method=method, url=url, headers=headers)
+
+        # Verify that access is denied with 401 Unauthorized
+        assert response.status_code == expected_status, (
+            f"Expected {expected_status} for unauthenticated access to {method} {endpoint}"
+        )
+
+        print(
+            f"✅ Correctly denied access to {method} {endpoint} with status {response.status_code}"
+        )
+
+        # Restore the authentication token for subsequent tests
+        self.token = temp_token
+        print("✅ Unauthenticated access test passed")
 
     # Warehouse Tests
     def test_create_warehouse(self) -> None:
@@ -611,9 +646,6 @@ class WarehouseAPITest:
         warehouse_id = self.inventory_records[0]["warehouse_id"]
         response = self.make_request("GET", f"/inventory/warehouse/{warehouse_id}")
 
-        # Print response for debugging
-        print(f"Response structure: {response}, inv: {self.inventory_records[0]}")
-
         # Verify response
         assert isinstance(response, list), "Response should be a list"
         assert len(response) > 0, "Response should contain at least one inventory record"
@@ -621,9 +653,6 @@ class WarehouseAPITest:
         # Check if our created inventory is in the list
         inventory_found = False
         for inv in response:
-            # Print each inventory record for debugging
-            print(f"Checking inventory record: {inv}")
-
             # Check if this is our inventory record
             if (
                 inv["warehouse_id"] == self.inventory_records[0]["warehouse_id"]
@@ -651,9 +680,6 @@ class WarehouseAPITest:
         item_id = self.inventory_records[0]["item_id"]
         response = self.make_request("GET", f"/inventory/item/{item_id}")
 
-        # Print response for debugging
-        print(f"Response structure: {response}")
-
         # Verify response
         assert isinstance(response, list), "Response should be a list"
         assert len(response) > 0, "Response should contain at least one inventory record"
@@ -661,9 +687,6 @@ class WarehouseAPITest:
         # Check if our created inventory is in the list
         inventory_found = False
         for inv in response:
-            # Print each inventory record for debugging
-            print(f"Checking inventory record: {inv}")
-
             # Check if this is our inventory record
             if (
                 inv["warehouse_id"] == self.inventory_records[0]["warehouse_id"]
