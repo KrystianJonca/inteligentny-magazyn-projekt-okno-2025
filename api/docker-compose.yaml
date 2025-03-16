@@ -31,6 +31,17 @@ services:
       timeout: 5s
       retries: 10
 
+  # E2E test service (only used when running tests)
+  e2e-test:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      api:
+        condition: service_healthy
+    command: python /app/e2e_test.py --host http://api --port 8000
+    profiles:
+      - test
 
 volumes:
   postgres_data:
