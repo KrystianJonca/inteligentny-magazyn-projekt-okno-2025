@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.core.middleware import setup_auth_middleware
 from app.routers.auth import router as auth_router
+from app.routers.item import router as item_router
 from app.routers.warehouse import router as warehouse_router
 
 app = FastAPI(
@@ -13,6 +14,7 @@ app = FastAPI(
 # Include routers
 app.include_router(auth_router)
 app.include_router(warehouse_router)
+app.include_router(item_router)
 # Set up authentication middleware
 setup_auth_middleware(app)
 
