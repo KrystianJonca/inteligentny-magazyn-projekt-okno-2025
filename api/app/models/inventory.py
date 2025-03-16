@@ -71,3 +71,11 @@ class InventoryTransfer(SQLModel):
     destination_warehouse_id: int
     item_id: int
     quantity: int
+
+
+class InventoryTransferResponse(SQLModel):
+    """Response model for inventory transfer operations."""
+
+    message: str
+    source_inventory: InventoryRead
+    destination_inventory: InventoryRead

@@ -6,6 +6,7 @@ from app.models.inventory import (
     InventoryCreate,
     InventoryRead,
     InventoryTransfer,
+    InventoryTransferResponse,
     InventoryUpdate,
     InventoryWithItem,
     InventoryWithWarehouse,
@@ -84,7 +85,7 @@ async def delete_inventory(
     return None
 
 
-@router.post("/transfer", status_code=status.HTTP_200_OK)
+@router.post("/transfer", response_model=InventoryTransferResponse, status_code=status.HTTP_200_OK)
 async def transfer_inventory(
     transfer: InventoryTransfer, db: AsyncSession = Depends(get_db_session)
 ):
@@ -126,8 +127,8 @@ async def transfer_inventory(
         )
 
     # Return the updated inventory records
-    return {
-        "message": f"Successfully transferred {transfer.quantity} units of item {transfer.item_id}",
-        "source_inventory": source_inventory,
-        "destination_inventory": destination_inventory,
-    }
+    return InventoryTransferResponse(
+        message=f"Successfully transferred {transfer.quantity} units of item {transfer.item_id}",
+        source_inventory=source_inventory,
+        destination_inventory=destination_inventory,
+    )
