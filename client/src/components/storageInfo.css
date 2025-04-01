@@ -1,0 +1,39 @@
+.storageInfo {
+    padding: 10px;
+    border: 2px solid #90e5d8;
+    width: 717px;
+    height: 566px;
+}
+.generalInfo {
+    margin-top: 103px;
+    width: 348px;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+.generalInfo div {
+    margin-left: 24px;
+    width: 300px;
+    margin-bottom: 50px;
+    display: block;
+    text-align: left;
+}
+.generalInfo img {
+    display: inline-block;
+    height: 40px;
+    vertical-align: middle;
+}
+.generalInfo h2 {
+    margin-left: 20px;
+    display: inline;
+    width: fit-content;
+    vertical-align: middle;
+}
+.locationInfo {
+    display: inline-block;
+    vertical-align: text-bottom;
+    width: 348px;
+    text-align: center;
+}
+.locationInfo h2 {
+    margin: 0;
+}

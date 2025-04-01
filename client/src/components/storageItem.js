@@ -1,0 +1,51 @@
+import './StorageItem.css';
+
+function StorageItem() {
+    return (
+            <div className='storageWrapper'>
+                <div className="storage">
+                    <img src='icons/crate.svg'/>
+                    <h1>Magazyn Woronicza</h1>
+                    <img src='icons/arrowUp.svg' onClick={(e)=> {
+                        if (e.target.style.transform != "rotate(180deg)") {
+                            e.target.style.transform = "rotate(180deg)";
+                            e.target.parentNode.parentNode.querySelector(".storageDetails").style.height = "auto";
+                        } else {
+                            e.target.style.transform = "rotate(0deg)";
+                            e.target.parentNode.parentNode.querySelector(".storageDetails").style.height = "0";
+                        }
+                    }}/>
+                </div>
+                <div className='storageDetails'>
+                    <br></br>
+                    <div className='favouritedItem'>
+                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
+                        <h2 style={{width: "min-content"}}>120</h2>
+                        <img src='icons/arrowRight.svg'/>
+                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
+                    </div>
+                    <div className='favouritedItem'>
+                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
+                        <h2 style={{width: "min-content"}}>120</h2>
+                        <img src='icons/arrowRight.svg'/>
+                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
+                    </div>
+                    <div className='favouritedItem'>
+                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
+                        <h2 style={{width: "min-content"}}>120</h2>
+                        <img src='icons/arrowRight.svg'/>
+                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
+                    </div>
+                    <div className='favouritedItem'>
+                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
+                        <h2 style={{width: "min-content"}}>120</h2>
+                        <img src='icons/arrowRight.svg'/>
+                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
+                    </div>
+                    <br></br>
+                </div>
+            </div>
+    );
+}
+
+export default StorageItem

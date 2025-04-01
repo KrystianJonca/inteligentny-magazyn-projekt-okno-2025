@@ -1,0 +1,71 @@
+.storageWrapper {
+    position: relative;
+}
+.storage {
+    position: absolute;
+    width: 718px;
+    height: 125px;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid #78e4d2;
+    display: block;
+    text-align: center;
+    line-height: 125px;
+    outline: 1px solid black;
+    padding: 0;
+    justify-content: space-between;
+    z-index: 999;
+}
+.storage img:nth-child(1) {
+    padding-top: 12px;
+    padding-left: 20px;
+    float: left;
+    vertical-align: middle;
+    height: 100px;
+    margin: 0;
+}
+.storage h1 {
+    width: fit-content;
+    display: inline;
+    vertical-align: middle;
+}
+.storage img:nth-child(3) {
+    height: 64px;
+    width: 64px;
+    transition: all .3s ease-in-out;
+    float: right;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.storageDetails {
+    overflow: hidden;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 640px;
+    display: block;
+    outline: 2px solid black;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 100px;
+    height: 0;
+}
+.favouritedItem {
+    padding: 10px;
+    border: 1px solid black;
+    line-height: 40px;
+    margin-bottom: 10px;
+}
+.favouritedItem h2 {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+.favouritedItem img {
+    margin-top: 5px;
+    float: right;
+    vertical-align: middle;
+}
