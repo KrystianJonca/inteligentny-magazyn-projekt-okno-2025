@@ -1,8 +1,18 @@
 .storageInfo {
+    position: absolute;
+    left: -800px;
+    top: 200px;
     padding: 10px;
     border: 2px solid #90e5d8;
     width: 717px;
     height: 566px;
+    background-color: white;
+    z-index: 9999;
+}
+.storageInfo h1 {
+    float: right;
+    transform: rotate(45deg);
+    font-size: 30px;
 }
 .generalInfo {
     margin-top: 103px;

@@ -3,6 +3,9 @@ import './storageInfo.css'
 function StorageInfo() {
     return(
         <div className="storageInfo">
+            <h1 onClick={()=> {
+                document.querySelector('.storageInfo').style.left = '-800px';
+            }}>+</h1>
             <div className='generalInfo'>
                 <div>
                     <img src='icons/label.svg'/>

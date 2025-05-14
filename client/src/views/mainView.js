@@ -1,10 +1,12 @@
 import './mainView.css'
 import StorageItem from '../components/storageItem';
 import SearchBar from '../components/searchBar';
-import SearchedItem from '../components/searchedItem'
+import SearchedItem from '../components/searchedItem';
+import StorageInfo from '../components/storageInfo';
 function mainView() {
     return(
         <div>
+            <StorageInfo/>
             <div className="topPanel">
                 <img src="icons/project-logo.svg" alt='logo'/>
                 <h1>Smart Warehouse Management</h1>

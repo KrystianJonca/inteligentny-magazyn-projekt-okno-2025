@@ -49,7 +49,9 @@ function StorageItem() {
                     <table>
                         <tr>
                             <td><h2>+</h2></td>
-                            <td><button>info</button></td>
+                            <td><button onClick={()=> {
+                                document.querySelector('.storageInfo').style.left = '361px';
+                            }}>info</button></td>
                         </tr>
                     </table>
                 </div>
