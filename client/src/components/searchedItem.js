@@ -10,9 +10,13 @@ function SearchedItem() {
                         if (e.target.style.transform != "rotate(180deg)") {
                             e.target.style.transform = "rotate(180deg)";
                             e.target.parentNode.parentNode.querySelector(".searchedItemDetails").style.height = "auto";
+                            let height = e.target.parentNode.parentNode.querySelector(".searchedItemDetails").offsetHeight;
+                            console.log(height);
+                            e.target.parentNode.parentNode.style.height = `${height+30}px`;
                         } else {
                             e.target.style.transform = "rotate(0deg)";
                             e.target.parentNode.parentNode.querySelector(".searchedItemDetails").style.height = "0";
+                            e.target.parentNode.parentNode.style.height = `84px`;
                         }
                     }}/>
             </div>

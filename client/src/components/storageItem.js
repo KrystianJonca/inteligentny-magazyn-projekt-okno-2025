@@ -10,9 +10,12 @@ function StorageItem() {
                         if (e.target.style.transform != "rotate(180deg)") {
                             e.target.style.transform = "rotate(180deg)";
                             e.target.parentNode.parentNode.querySelector(".storageDetails").style.height = "auto";
+                            let height = e.target.parentNode.parentNode.querySelector(".storageDetails").offsetHeight;
+                            e.target.parentNode.parentNode.style.height = `${height+50}px`;
                         } else {
                             e.target.style.transform = "rotate(0deg)";
                             e.target.parentNode.parentNode.querySelector(".storageDetails").style.height = "0";
+                            e.target.parentNode.parentNode.style.height = `150px`;
                         }
                     }}/>
                 </div>
@@ -43,6 +46,12 @@ function StorageItem() {
                         <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
                     </div>
                     <br></br>
+                    <table>
+                        <tr>
+                            <td><h2>+</h2></td>
+                            <td><button>info</button></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
     );

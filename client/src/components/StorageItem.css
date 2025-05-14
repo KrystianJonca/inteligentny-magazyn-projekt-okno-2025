@@ -1,5 +1,6 @@
 .storageWrapper {
     position: relative;
+    height: 150px;
 }
 .storage {
     position: absolute;
@@ -15,6 +16,7 @@
     padding: 0;
     justify-content: space-between;
     z-index: 999;
+    margin-left: 103px;
 }
 .storage img:nth-child(1) {
     padding-top: 12px;
@@ -42,7 +44,7 @@
 .storageDetails {
     overflow: hidden;
     position: absolute;
-    left: 20px;
+    left: 123px;
     top: 20px;
     width: 640px;
     display: block;
@@ -51,6 +53,13 @@
     padding-right: 20px;
     padding-top: 100px;
     height: 0;
+}
+.storageDetails table {
+    width: 100%;
+}
+.storageDetails td {
+    text-align: right;
+    width: 50%;
 }
 .favouritedItem {
     padding: 10px;

@@ -5,6 +5,7 @@
     border-radius: 31px;
     outline: 1px solid black;
     padding: 0;
+    margin-bottom: 20px;
 }
 .searchBarWrapper img {
     margin-left: 11px;

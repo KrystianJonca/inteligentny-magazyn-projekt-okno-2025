@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import StorageInfo from './components/storageInfo';
+import MainView from './views/mainView';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <StorageInfo/>
+    <MainView/>
   </React.StrictMode>
 );
 

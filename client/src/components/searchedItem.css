@@ -1,5 +1,7 @@
 .searchedItemWrapper {
+    margin-left: 5px;
     position: relative;
+    height: 84px;
 }
 .searchedItem {
     position: absolute;
@@ -43,7 +45,7 @@
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 54px;
-    height: auto;
+    height: 0;
 }
 .listedStorage {
     padding: 0;
