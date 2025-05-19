@@ -3,7 +3,9 @@ import StorageItem from '../components/storageItem';
 import SearchBar from '../components/searchBar';
 import SearchedItem from '../components/searchedItem';
 import StorageInfo from '../components/storageInfo';
+import { getWarehouses } from '../events/warehouses';
 function mainView() {
+    getWarehouses();
     return(
         <div>
             <StorageInfo/>
