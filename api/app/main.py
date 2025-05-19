@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.middleware import setup_auth_middleware
 from app.routers.auth import router as auth_router
@@ -10,6 +11,15 @@ app = FastAPI(
     title="Warehouse Management API",
     description="API for managing warehouses, items, and inventory",
     version="0.1.0",
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 setup_auth_middleware(app)
