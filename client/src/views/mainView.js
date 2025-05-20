@@ -3,9 +3,11 @@ import StorageItem from '../components/storageItem';
 import SearchBar from '../components/searchBar';
 import SearchedItem from '../components/searchedItem';
 import StorageInfo from '../components/storageInfo';
+import { getWarehouses } from '../events/warehouses';
 function mainView() {
     return(
         <div>
+            <button onClick={getWarehouses}>get</button>
             <StorageInfo/>
             <div className="topPanel">
                 <img src="icons/project-logo.svg" alt='logo'/>
