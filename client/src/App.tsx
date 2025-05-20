@@ -1,4 +1,4 @@
-import { Home, Package, LogOut } from 'lucide-react';
+import { Home, Package, LogOut, ListChecks } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,13 @@ function App() {
           >
             <Package className="h-5 w-5" />
             <span>Warehouses</span>
+          </Link>
+          <Link
+            to="/items"
+            className="flex items-center space-x-3 px-3 py-2.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors duration-150"
+          >
+            <ListChecks className="h-5 w-5" />
+            <span>Items</span>
           </Link>
           {/* Add more navigation links here as needed */}
         </nav>

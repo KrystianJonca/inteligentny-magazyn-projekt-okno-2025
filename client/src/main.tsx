@@ -10,6 +10,7 @@ import { AuthProvider } from './contexts/AuthContext.tsx';
 import './index.css';
 import { AuthPage } from './pages/AuthPage.tsx';
 import { DashboardPage } from './pages/DashboardPage.tsx';
+import { ItemsPage } from './pages/ItemsPage.tsx';
 import { WarehousesPage } from './pages/WarehousesPage.tsx';
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <Route element={<App />}>
                 <Route index element={<DashboardPage />} /> {/* Dashboard page for root */}
                 <Route path="warehouses" element={<WarehousesPage />} />
+                <Route path="items" element={<ItemsPage />} />
                 {/* Add other protected routes nested under App layout here */}
               </Route>
             </Route>
