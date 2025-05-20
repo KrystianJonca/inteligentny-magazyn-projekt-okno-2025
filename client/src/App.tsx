@@ -1,5 +1,6 @@
 import { Home, Package, LogOut, ListChecks } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -62,6 +63,7 @@ function App() {
           <Outlet /> {/* Nested routes will render here */}
         </div>
       </main>
+      <Toaster richColors position="top-right" />
     </div>
   );
 }

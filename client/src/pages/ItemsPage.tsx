@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { getItems, deleteItem as apiDeleteItem } from '@/api/item';
 import type { ItemReadWithInventory, PaginatedItems } from '@/api/schema.types';
@@ -60,10 +61,10 @@ export function ItemsPage() {
     mutationFn: apiDeleteItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['items'] });
-      console.log('Item deleted successfully!');
+      toast.success('Item deleted successfully!');
     },
     onError: err => {
-      console.error('Error deleting item:', err);
+      toast.error(`Error deleting item: ${err.message}`);
     },
   });
 

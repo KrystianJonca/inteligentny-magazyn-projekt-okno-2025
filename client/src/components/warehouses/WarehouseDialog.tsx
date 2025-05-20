@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import { WarehouseForm, type WarehouseSubmitValues } from './WarehouseForm';
 
@@ -26,25 +27,29 @@ export function WarehouseDialog({ isOpen, onClose, warehouse, onSuccess }: Wareh
     mutationFn: createWarehouse,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['warehouses'] });
+      toast.success('Warehouse created successfully!');
       onSuccess?.();
-      onClose(); // Close dialog on success
+      onClose();
     },
-    onError: error => {
-      // TODO: Display error to user (e.g., toast notification)
-      console.error('Error creating warehouse:', error);
+    onError: err => {
+      toast.error(`Error creating warehouse: ${err.message}`);
     },
   });
 
-  const updateMutation = useMutation<WarehouseRead, Error, { id: number; data: WarehouseUpdate }>({
-    mutationFn: ({ id, data }) => updateWarehouse(id, data),
+  const updateMutation = useMutation<
+    WarehouseRead,
+    Error,
+    { warehouseId: number; data: WarehouseUpdate }
+  >({
+    mutationFn: ({ warehouseId, data }) => updateWarehouse(warehouseId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['warehouses'] });
-      queryClient.invalidateQueries({ queryKey: ['warehouse', warehouse?.warehouse_id] }); // Invalidate specific warehouse query if viewing details elsewhere
+      toast.success('Warehouse updated successfully!');
       onSuccess?.();
-      onClose(); // Close dialog on success
+      onClose();
     },
-    onError: error => {
-      console.error('Error updating warehouse:', error);
+    onError: err => {
+      toast.error(`Error updating warehouse: ${err.message}`);
     },
   });
 
@@ -70,7 +75,10 @@ export function WarehouseDialog({ isOpen, onClose, warehouse, onSuccess }: Wareh
     };
 
     if (warehouse && warehouse.warehouse_id) {
-      updateMutation.mutate({ id: warehouse.warehouse_id, data: payload as WarehouseUpdate });
+      updateMutation.mutate({
+        warehouseId: warehouse.warehouse_id,
+        data: payload as WarehouseUpdate,
+      });
     } else {
       createMutation.mutate(payload as WarehouseCreate);
     }

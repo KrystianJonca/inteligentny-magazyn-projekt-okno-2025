@@ -2,11 +2,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { loginUser as apiLoginUser, registerUser as apiRegisterUser } from '@/api/auth';
 import type { LoginPayload, UserCreate, Token, UserRead } from '@/api/schema.types';
 
-const TOKEN_KEY = 'authToken';
+export const TOKEN_KEY = 'authToken';
+
+// Exported handler for unauthorized access
+export const handleUnauthorizedAccess = () => {
+  localStorage.removeItem(TOKEN_KEY);
+  // Optionally clear other persisted states if any
+  window.location.href = '/auth'; // Force reload to auth page
+};
 
 interface AuthContextType {
   token: string | null;
@@ -40,9 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
       localStorage.removeItem(TOKEN_KEY);
     }
-    // When token changes, we might want to refetch user-specific queries
-    // For now, this is fine.
-    queryClient.invalidateQueries(); // Invalidate all queries on auth change
+    queryClient.invalidateQueries();
   }, [token, queryClient]);
 
   const loginMutation = useMutation<Token, Error, LoginPayload>({
@@ -50,6 +56,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     onSuccess: data => {
       setToken(data.access_token);
       navigate('/');
+      toast.success('Login successful!');
+    },
+    onError: error => {
+      toast.error(`Login failed: ${error.message}`);
     },
   });
 
@@ -61,11 +71,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   >({
     mutationFn: apiRegisterUser,
     onSuccess: (data, _variables, context) => {
+      toast.success('Registration successful! You can now log in.');
       if (context?.onSuccess) {
         context.onSuccess(data);
       }
     },
     onError: (error, _variables, context) => {
+      toast.error(`Registration failed: ${error.message}`);
       if (context?.onError) {
         context.onError(error);
       }
@@ -73,8 +85,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const logout = () => {
-    setToken(null);
-    navigate('/auth');
+    setToken(null); // This will trigger the useEffect to remove from localStorage
+    // navigate('/auth'); // The navigate call is now in handleUnauthorizedAccess or can be called directly if preferred
+    handleUnauthorizedAccess(); // Centralize logout logic
   };
 
   return (

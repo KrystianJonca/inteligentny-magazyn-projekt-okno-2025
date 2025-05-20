@@ -4,11 +4,17 @@ import type {
   InventoryRead,
   InventoryUpdate,
   InventoryWithWarehouse,
+  InventoryWithItem,
 } from './schema.types';
 
 // Get all inventory records for a specific item (showing warehouses and quantities)
 export const getInventoryByItem = (itemId: number): Promise<InventoryWithWarehouse[]> => {
   return apiClient<InventoryWithWarehouse[]>(`/inventory/item/${itemId}`, { method: 'GET' });
+};
+
+// Get all inventory records for a specific warehouse (showing items and quantities)
+export const getInventoryByWarehouse = (warehouseId: number): Promise<InventoryWithItem[]> => {
+  return apiClient<InventoryWithItem[]>(`/inventory/warehouse/${warehouseId}`, { method: 'GET' });
 };
 
 // Create a new inventory record (add an item to a warehouse)

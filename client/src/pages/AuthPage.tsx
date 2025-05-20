@@ -26,6 +26,7 @@ export function AuthPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('isAuthenticated', isAuthenticated);
     if (isAuthenticated) {
       navigate('/');
     }

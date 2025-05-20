@@ -1,7 +1,8 @@
 import type { HTTPValidationError, ValidationError } from './schema.types';
 
+import { TOKEN_KEY } from '@/contexts/AuthContext';
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-const TOKEN_KEY = 'authToken';
 
 interface RequestOptions extends RequestInit {
   isPublic?: boolean; // To allow requests to public endpoints like login/register

@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { createItem, updateItem } from '@/api/item';
@@ -75,13 +76,12 @@ export function ItemDialog({ isOpen, onClose, item, onSuccess }: ItemDialogProps
     mutationFn: createItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['items'] });
-      console.log('Item created successfully!');
+      toast.success('Item created successfully!');
       onSuccess?.();
       onClose();
     },
     onError: err => {
-      console.error('Error creating item:', err);
-      // TODO: Show error toast
+      toast.error(`Error creating item: ${err.message}`);
     },
   });
 
@@ -93,13 +93,12 @@ export function ItemDialog({ isOpen, onClose, item, onSuccess }: ItemDialogProps
     mutationFn: ({ itemId, data }) => updateItem(itemId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['items'] });
-      console.log('Item updated successfully!');
+      toast.success('Item updated successfully!');
       onSuccess?.();
       onClose();
     },
     onError: err => {
-      console.error('Error updating item:', err);
-      // TODO: Show error toast
+      toast.error(`Error updating item: ${err.message}`);
     },
   });
 

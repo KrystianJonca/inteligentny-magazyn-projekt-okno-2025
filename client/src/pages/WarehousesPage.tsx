@@ -1,62 +1,64 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import type { WarehouseRead } from '@/api/schema.types';
 import { getWarehouses, deleteWarehouse as apiDeleteWarehouse } from '@/api/warehouse';
 import { Button } from '@/components/ui/button';
 import { WarehouseDialog } from '@/components/warehouses/WarehouseDialog';
+import { WarehouseInventoryDialog } from '@/components/warehouses/WarehouseInventoryDialog';
 import { WarehouseTable } from '@/components/warehouses/WarehouseTable';
 
 export function WarehousesPage() {
   const queryClient = useQueryClient();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedWarehouse, setSelectedWarehouse] = useState<WarehouseRead | null>(null);
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  const [selectedWarehouseForForm, setSelectedWarehouseForForm] = useState<WarehouseRead | null>(
+    null
+  );
+  const [isInventoryDialogOpen, setIsInventoryDialogOpen] = useState(false);
+  const [selectedWarehouseForInventory, setSelectedWarehouseForInventory] =
+    useState<WarehouseRead | null>(null);
 
   const {
-    data: warehouses,
+    data: warehousesData,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<WarehouseRead[], Error>({
     queryKey: ['warehouses'],
     queryFn: getWarehouses,
   });
+  const warehouses = warehousesData || [];
 
-  const deleteMutation = useMutation({
+  const deleteMutation = useMutation<void, Error, number>({
     mutationFn: apiDeleteWarehouse,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['warehouses'] });
-      console.log('Warehouse deleted successfully!');
+      toast.success('Warehouse deleted successfully!');
     },
     onError: err => {
-      console.error('Error deleting warehouse:', err);
+      toast.error(`Error deleting warehouse: ${err.message}`);
     },
   });
 
   const handleOpenCreateDialog = () => {
-    setSelectedWarehouse(null);
-    setIsDialogOpen(true);
+    setSelectedWarehouseForForm(null);
+    setIsFormDialogOpen(true);
   };
 
-  const handleEdit = (warehouse: WarehouseRead) => {
-    setSelectedWarehouse(warehouse);
-    setIsDialogOpen(true);
+  const handleEditWarehouse = (warehouse: WarehouseRead) => {
+    setSelectedWarehouseForForm(warehouse);
+    setIsFormDialogOpen(true);
   };
 
-  const handleDelete = (warehouseId: number) => {
+  const handleDeleteWarehouse = (warehouseId: number) => {
     if (window.confirm('Are you sure you want to delete this warehouse?')) {
       deleteMutation.mutate(warehouseId);
     }
   };
 
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-    setSelectedWarehouse(null);
-  };
-
-  const handleDialogSuccess = () => {
-    setIsDialogOpen(false);
-    setSelectedWarehouse(null);
-    console.log('Warehouse operation successful, dialog closed.');
+  const handleManageInventory = (warehouse: WarehouseRead) => {
+    setSelectedWarehouseForInventory(warehouse);
+    setIsInventoryDialogOpen(true);
   };
 
   if (isLoading) return <div className="container mx-auto py-10">Loading warehouses...</div>;
@@ -72,14 +74,29 @@ export function WarehousesPage() {
         <Button onClick={handleOpenCreateDialog}>Add Warehouse</Button>
       </div>
 
-      <WarehouseTable warehouses={warehouses || []} onEdit={handleEdit} onDelete={handleDelete} />
+      <WarehouseTable
+        warehouses={warehouses}
+        onEdit={handleEditWarehouse}
+        onDelete={handleDeleteWarehouse}
+        onManageInventory={handleManageInventory}
+      />
 
       <WarehouseDialog
-        isOpen={isDialogOpen}
-        onClose={handleDialogClose}
-        warehouse={selectedWarehouse}
-        onSuccess={handleDialogSuccess}
+        isOpen={isFormDialogOpen}
+        onClose={() => setIsFormDialogOpen(false)}
+        warehouse={selectedWarehouseForForm}
+        onSuccess={() => {
+          setIsFormDialogOpen(false);
+        }}
       />
+
+      {selectedWarehouseForInventory && (
+        <WarehouseInventoryDialog
+          isOpen={isInventoryDialogOpen}
+          onClose={() => setIsInventoryDialogOpen(false)}
+          warehouse={selectedWarehouseForInventory}
+        />
+      )}
     </div>
   );
 }

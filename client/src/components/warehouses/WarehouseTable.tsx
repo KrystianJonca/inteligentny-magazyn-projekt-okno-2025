@@ -1,4 +1,4 @@
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, PackageSearch, Pencil, Trash2 } from 'lucide-react';
 
 import type { WarehouseRead } from '@/api/schema.types';
 import { Button } from '@/components/ui/button';
@@ -19,12 +19,17 @@ import {
 
 interface WarehouseTableProps {
   warehouses: WarehouseRead[];
-  onView?: (warehouse: WarehouseRead) => void; // Optional: To view details, perhaps in a modal or separate page
   onEdit: (warehouse: WarehouseRead) => void;
   onDelete: (warehouseId: number) => void;
+  onManageInventory: (warehouse: WarehouseRead) => void;
 }
 
-export function WarehouseTable({ warehouses, onView, onEdit, onDelete }: WarehouseTableProps) {
+export function WarehouseTable({
+  warehouses,
+  onEdit,
+  onDelete,
+  onManageInventory,
+}: WarehouseTableProps) {
   return (
     <div className="rounded-md border">
       <Table>
@@ -33,25 +38,19 @@ export function WarehouseTable({ warehouses, onView, onEdit, onDelete }: Warehou
             <TableHead>Name</TableHead>
             <TableHead>Address</TableHead>
             <TableHead>Manager</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="text-right">Sq. Footage</TableHead>
+            <TableHead className="w-[80px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {warehouses.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={5} className="h-24 text-center">
-                No warehouses found.
-              </TableCell>
-            </TableRow>
-          ) : (
+          {warehouses.length > 0 ? (
             warehouses.map(warehouse => (
               <TableRow key={warehouse.warehouse_id}>
                 <TableCell className="font-medium">{warehouse.name}</TableCell>
                 <TableCell>{warehouse.address}</TableCell>
                 <TableCell>{warehouse.manager_name}</TableCell>
-                <TableCell>{warehouse.phone}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right">{warehouse.square_footage} sq ft</TableCell>
+                <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="h-8 w-8 p-0">
@@ -60,16 +59,19 @@ export function WarehouseTable({ warehouses, onView, onEdit, onDelete }: Warehou
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      {onView && (
-                        <DropdownMenuItem onClick={() => onView(warehouse)}>
-                          View Details
-                        </DropdownMenuItem>
-                      )}
-                      <DropdownMenuItem onClick={() => onEdit(warehouse)}>Edit</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onEdit(warehouse)}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Edit Warehouse
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onManageInventory(warehouse)}>
+                        <PackageSearch className="mr-2 h-4 w-4" />
+                        Manage Inventory
+                      </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => onDelete(warehouse.warehouse_id)}
-                        className="text-red-600 hover:!text-red-600 hover:!bg-red-50"
+                        className="text-red-600 hover:!text-red-600 hover:!bg-red-100 dark:hover:!bg-red-700/50"
                       >
+                        <Trash2 className="mr-2 h-4 w-4" />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -77,6 +79,12 @@ export function WarehouseTable({ warehouses, onView, onEdit, onDelete }: Warehou
                 </TableCell>
               </TableRow>
             ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={5} className="h-24 text-center">
+                No warehouses found.
+              </TableCell>
+            </TableRow>
           )}
         </TableBody>
       </Table>
