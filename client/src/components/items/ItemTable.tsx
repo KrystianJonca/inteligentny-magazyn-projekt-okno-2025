@@ -1,4 +1,4 @@
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash2, PackageSearch } from 'lucide-react';
 
 import type { ItemReadWithInventory } from '@/api/schema.types';
 import { Button } from '@/components/ui/button';
@@ -21,9 +21,10 @@ interface ItemTableProps {
   items: ItemReadWithInventory[];
   onEdit: (item: ItemReadWithInventory) => void;
   onDelete: (itemId: number) => void;
+  onManageStock: (item: ItemReadWithInventory) => void;
 }
 
-export function ItemTable({ items, onEdit, onDelete }: ItemTableProps) {
+export function ItemTable({ items, onEdit, onDelete, onManageStock }: ItemTableProps) {
   return (
     <div className="rounded-md border">
       <Table>
@@ -56,6 +57,10 @@ export function ItemTable({ items, onEdit, onDelete }: ItemTableProps) {
                       <DropdownMenuItem onClick={() => onEdit(item)}>
                         <Pencil className="mr-2 h-4 w-4" />
                         Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onManageStock(item)}>
+                        <PackageSearch className="mr-2 h-4 w-4" />
+                        Manage Stock
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => onDelete(item.item_id)}
