@@ -9,6 +9,8 @@ import { ProtectedRoute } from './components/router/ProtectedRoute.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import './index.css';
 import { AuthPage } from './pages/AuthPage.tsx';
+import { DashboardPage } from './pages/DashboardPage.tsx';
+import { WarehousesPage } from './pages/WarehousesPage.tsx';
 
 const queryClient = new QueryClient();
 
@@ -20,10 +22,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/" element={<ProtectedRoute />}>
-              {/* Nested routes under ProtectedRoute will only be accessible if authenticated */}
-              <Route index element={<App />} />{' '}
-              {/* App is now the index route of the protected path */}
-              {/* Add other protected routes here as needed */}
+              {/* App component is now the layout for protected routes */}
+              <Route element={<App />}>
+                <Route index element={<DashboardPage />} /> {/* Dashboard page for root */}
+                <Route path="warehouses" element={<WarehousesPage />} />
+                {/* Add other protected routes nested under App layout here */}
+              </Route>
             </Route>
           </Routes>
         </AuthProvider>
