@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Debug Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Debug Interface</h1>
+        
+        <div id="loginSection">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            <button onclick="handleLogin()">Login</button>
+        </div>
+
+        <div id="apiSection" style="display: none;">
+            <h2>API Testing</h2>
+            <button onclick="handleGetWarehouses()">Get Warehouses</button>
+            <button onclick="handleLogout()">Logout</button>
+        </div>
+
+        <div id="status" class="status"></div>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        // Check if user is logged in on page load
+        window.onload = function() {
+            const token = sessionStorage.getItem("swm_token");
+            if (token) {
+                showApiSection();
+            }
+        }
+
+        function showApiSection() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('apiSection').style.display = 'block';
+        }
+
+        function showLoginSection() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('apiSection').style.display = 'none';
+        }
+
+        function updateStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + (isError ? 'error' : 'success');
+        }
+
+        function updateOutput(data) {
+            const outputDiv = document.getElementById('output');
+            outputDiv.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                updateStatus('Please enter both username and password', true);
+                return;
+            }
+
+            try {
+                await login(username, password);
+                updateStatus('Login successful!');
+                showApiSection();
+            } catch (error) {
+                updateStatus('Login failed: ' + error.message, true);
+            }
+        }
+
+        async function handleGetWarehouses() {
+            try {
+                const result = await getWarehouses();
+                updateStatus('Warehouses fetched successfully!');
+                updateOutput(result);
+            } catch (error) {
+                updateStatus('Failed to fetch warehouses: ' + error.message, true);
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem("swm_token");
+            showLoginSection();
+            updateStatus('Logged out successfully');
+            updateOutput('');
+        }
+
+        async function getWarehouses() {
+            let headers = {
+                "Content-type": "application/json"
+            }
+            authorizeRequest(headers);
+            const response = await fetch("http://localhost:8000/warehouses", {
+                method: "GET",
+                headers: headers,
+            })
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+        }
+
+        async function login(username, password) {
+            const params = new URLSearchParams();
+            params.append("username", username);
+            params.append("password", password);
+            params.append("grant_type", "password");
+
+            const response = await fetch("http://localhost:8000/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: params.toString(),
+            })
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            sessionStorage.setItem("swm_token", data.access_token);
+        }
+
+        function authorizeRequest(headers) {
+            const token = sessionStorage.getItem("swm_token");
+            if (!token) {
+                throw new Error('No token found. Please login first.');
+            }
+            headers.Authorization = `Bearer ${token}`;
+        }
+    </script>
+</body>
+</html> 
