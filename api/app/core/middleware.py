@@ -14,7 +14,10 @@ def setup_auth_middleware(app: FastAPI) -> None:
     async def auth_middleware(request: Request, call_next: Callable) -> Response:
         """Middleware to protect endpoints."""
 
-        # Check if the path is public - use exact path or startswith for doc paths
+        # ✅ Allow CORS preflight requests
+        if request.method == "OPTIONS":
+            return Response(status_code=200)
+
         path = request.url.path
         if (
             path == "/"
@@ -26,7 +29,7 @@ def setup_auth_middleware(app: FastAPI) -> None:
         ):
             return await call_next(request)
 
-        # Get the authorization header
+        # ✅ Check Authorization header
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
             return JSONResponse(
@@ -35,23 +38,18 @@ def setup_auth_middleware(app: FastAPI) -> None:
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        # Extract and validate the token
         token = auth_header.replace("Bearer ", "")
         try:
-            # Validate the token
             payload = jwt.decode(
                 token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
             )
             user_id = payload.get("sub")
             if user_id is None:
                 raise JWTError("Missing user ID in token")
-
-            # Check token expiration
             exp = payload.get("exp")
             if exp is None:
                 raise JWTError("Missing expiration in token")
 
-            # Add user_id to request state for use in route handlers if needed
             request.state.user_id = user_id
 
         except JWTError as e:
@@ -61,5 +59,5 @@ def setup_auth_middleware(app: FastAPI) -> None:
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        # Continue with the request
         return await call_next(request)
+
