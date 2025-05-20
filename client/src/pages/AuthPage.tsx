@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import type { components } from '@/api/types';
+import type { LoginPayload, UserCreate } from '@/api/schema.types';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { RegistrationForm } from '@/components/auth/RegistrationForm';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -11,13 +11,16 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export function AuthPage() {
   const [isLoginView, setIsLoginView] = useState(true);
-  // Error state local to the page, to display form submission errors
-  const [pageError, setPageError] = useState<string | null>(null);
+  const [pageMessage, setPageMessage] = useState<string | null>(null); // For success/error messages
+  const [messageType, setMessageType] = useState<'success' | 'error'>('error');
+
   const {
     login,
+    isLoggingIn,
+    loginError,
     register,
-    isLoading: authIsLoading,
-    error: authError,
+    isRegistering,
+    registerError,
     isAuthenticated,
   } = useAuth();
   const navigate = useNavigate();
@@ -28,56 +31,56 @@ export function AuthPage() {
     }
   }, [isAuthenticated, navigate]);
 
-  // Effect to clear pageError if authError changes (e.g. global error from context)
   useEffect(() => {
-    if (authError) {
-      setPageError(authError);
+    if (loginError) {
+      setPageMessage(loginError.message);
+      setMessageType('error');
     }
-  }, [authError]);
+  }, [loginError]);
 
-  const handleLoginSubmit = async (data: components['schemas']['Body_login_auth_login_post']) => {
-    setPageError(null); // Clear previous page-specific errors
-    try {
-      await login(data);
-      // Navigation is handled by the AuthContext or the useEffect above
-    } catch (err) {
-      // AuthContext throws error, so we can catch it here to display in the form
-      setPageError(err instanceof Error ? err.message : 'An unknown error occurred during login.');
+  useEffect(() => {
+    if (registerError) {
+      setPageMessage(registerError.message);
+      setMessageType('error');
     }
+  }, [registerError]);
+
+  const handleLoginSubmit = async (data: LoginPayload) => {
+    setPageMessage(null);
+    login(data); // Call the mutation trigger from context
+    // Error and loading states are handled by the context and useEffects above
   };
 
-  const handleRegisterSubmit = async (data: components['schemas']['UserCreate']) => {
-    setPageError(null); // Clear previous page-specific errors
-    try {
-      await register(data);
-      // After successful registration, show a message and switch to login view
-      setIsLoginView(true);
-      setPageError('Registration successful! Please log in.');
-    } catch (err) {
-      setPageError(
-        err instanceof Error ? err.message : 'An unknown error occurred during registration.'
-      );
-    }
+  const handleRegisterSubmit = async (data: UserCreate) => {
+    setPageMessage(null);
+    register(data, {
+      onSuccess: () => {
+        setIsLoginView(true);
+        setPageMessage('Registration successful! Please log in.');
+        setMessageType('success');
+      },
+      onError: error => {
+        setPageMessage(error.message);
+        setMessageType('error');
+      },
+    });
   };
+
+  const isLoading = isLoggingIn || isRegistering;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-md">
-        {pageError && (
-          <Alert
-            variant={pageError.startsWith('Registration successful') ? 'default' : 'destructive'}
-            className="mb-4"
-          >
-            <AlertTitle>
-              {pageError.startsWith('Registration successful') ? 'Success' : 'Error'}
-            </AlertTitle>
-            <AlertDescription>{pageError}</AlertDescription>
+        {pageMessage && (
+          <Alert variant={messageType === 'success' ? 'default' : 'destructive'} className="mb-4">
+            <AlertTitle>{messageType === 'success' ? 'Success' : 'Error'}</AlertTitle>
+            <AlertDescription>{pageMessage}</AlertDescription>
           </Alert>
         )}
         {isLoginView ? (
-          <LoginForm onSubmit={handleLoginSubmit} isLoading={authIsLoading} />
+          <LoginForm onSubmit={handleLoginSubmit} isLoading={isLoading} />
         ) : (
-          <RegistrationForm onSubmit={handleRegisterSubmit} isLoading={authIsLoading} />
+          <RegistrationForm onSubmit={handleRegisterSubmit} isLoading={isLoading} />
         )}
         <Card className="mt-4">
           <CardContent>
@@ -87,10 +90,10 @@ export function AuthPage() {
                 variant="link"
                 onClick={() => {
                   setIsLoginView(!isLoginView);
-                  setPageError(null); // Clear errors when switching views
+                  setPageMessage(null); // Clear messages when switching views
                 }}
                 className="ml-1"
-                disabled={authIsLoading}
+                disabled={isLoading}
               >
                 {isLoginView ? 'Register' : 'Login'}
               </Button>

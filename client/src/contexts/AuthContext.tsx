@@ -1,29 +1,38 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { loginUser as apiLoginUser, registerUser as apiRegisterUser } from '@/api/auth';
-import type { components } from '@/api/types';
+import type { LoginPayload, UserCreate, Token, UserRead } from '@/api/schema.types';
 
 const TOKEN_KEY = 'authToken';
 
 interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-  login: (loginData: components['schemas']['Body_login_auth_login_post']) => Promise<void>;
-  register: (userData: components['schemas']['UserCreate']) => Promise<void>;
+  login: (loginData: LoginPayload) => void; // Will be a mutation trigger
+  register: (
+    userData: UserCreate,
+    options?: {
+      onSuccess?: (data: UserRead) => void;
+      onError?: (error: Error) => void;
+    }
+  ) => void; // Will be a mutation trigger
   logout: () => void;
+  // Expose mutation states
+  isLoggingIn: boolean;
+  loginError: Error | null;
+  isRegistering: boolean;
+  registerError: Error | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem(TOKEN_KEY));
-  const [isLoading, setIsLoading] = useState<boolean>(false); // For context operations
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient(); // Get QueryClient instance
 
   useEffect(() => {
     if (token) {
@@ -31,39 +40,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
       localStorage.removeItem(TOKEN_KEY);
     }
-  }, [token]);
+    // When token changes, we might want to refetch user-specific queries
+    // For now, this is fine.
+    queryClient.invalidateQueries(); // Invalidate all queries on auth change
+  }, [token, queryClient]);
 
-  const login = async (loginData: components['schemas']['Body_login_auth_login_post']) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const tokenData = await apiLoginUser(loginData);
-      setToken(tokenData.access_token);
+  const loginMutation = useMutation<Token, Error, LoginPayload>({
+    mutationFn: apiLoginUser,
+    onSuccess: data => {
+      setToken(data.access_token);
       navigate('/');
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred during login.';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
-  const register = async (userData: components['schemas']['UserCreate']) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      await apiRegisterUser(userData);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred during registration.';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const registerMutation = useMutation<
+    UserRead,
+    Error,
+    UserCreate,
+    { onSuccess?: (data: UserRead) => void; onError?: (error: Error) => void }
+  >({
+    mutationFn: apiRegisterUser,
+    onSuccess: (data, _variables, context) => {
+      if (context?.onSuccess) {
+        context.onSuccess(data);
+      }
+    },
+    onError: (error, _variables, context) => {
+      if (context?.onError) {
+        context.onError(error);
+      }
+    },
+  });
 
   const logout = () => {
     setToken(null);
@@ -75,10 +82,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         token,
         isAuthenticated: !!token,
-        isLoading,
-        error,
-        login,
-        register,
+        login: loginMutation.mutate, // Expose the mutate function
+        isLoggingIn: loginMutation.isPending,
+        loginError: loginMutation.error,
+        register: (userData, options) => registerMutation.mutate(userData, options),
+        isRegistering: registerMutation.isPending,
+        registerError: registerMutation.error,
         logout,
       }}
     >
