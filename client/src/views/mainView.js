@@ -8,6 +8,7 @@ function mainView() {
     getWarehouses();
     return(
         <div>
+            <button onClick={getWarehouses}>get</button>
             <StorageInfo/>
             <div className="topPanel">
                 <img src="icons/project-logo.svg" alt='logo'/>

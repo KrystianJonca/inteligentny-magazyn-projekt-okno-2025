@@ -1,3 +1,2 @@
 GET http://localhost:8000/warehouses
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzQ3Njc4MDg4fQ.4mGAzwN6JyVAOEn5sP_uCre71Ka-CAnGTFz16UJ6Mko

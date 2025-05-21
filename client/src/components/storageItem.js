@@ -22,26 +22,26 @@ function StorageItem() {
                 <div className='storageDetails'>
                     <br></br>
                     <div className='favouritedItem'>
-                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
-                        <h2 style={{width: "min-content"}}>120</h2>
+                        <h2>Artykuły biurowe</h2>
+                        <input type="text"/>
                         <img src='icons/arrowRight.svg'/>
                         <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
                     </div>
                     <div className='favouritedItem'>
-                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
-                        <h2 style={{width: "min-content"}}>120</h2>
+                        <h2>Artykuły biurowe</h2>
+                        <input type="text"/>
                         <img src='icons/arrowRight.svg'/>
                         <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
                     </div>
                     <div className='favouritedItem'>
-                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
-                        <h2 style={{width: "min-content"}}>120</h2>
+                        <h2>Artykuły biurowe</h2>
+                        <input type="text"/>
                         <img src='icons/arrowRight.svg'/>
                         <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
                     </div>
                     <div className='favouritedItem'>
-                        <h2 style={{width: 400 + 'px', fontWeight: 500}}>Artykuły biurowe</h2>
-                        <h2 style={{width: "min-content"}}>120</h2>
+                        <h2>Artykuły biurowe</h2>
+                        <input type="text"/>
                         <img src='icons/arrowRight.svg'/>
                         <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
                     </div>
