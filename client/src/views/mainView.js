@@ -5,6 +5,7 @@ import SearchedItem from '../components/searchedItem';
 import StorageInfo from '../components/storageInfo';
 import { getWarehouses } from '../events/warehouses';
 function mainView() {
+    getWarehouses();
     return(
         <div>
             <button onClick={getWarehouses}>get</button>
