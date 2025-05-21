@@ -1,11 +1,17 @@
+import { useEffect, useState } from 'react';
 import './StorageItem.css';
+import { getItemsInWarehouse } from '../events/warehouses';
 
-function StorageItem() {
+function StorageItem(props) {
+    let [items, updateItems] = useState([]);
+    useEffect(() => {
+        getItemsInWarehouse(props.warehouse.warehouse_id).then(updateItems);
+    }, []);
     return (
             <div className='storageWrapper'>
                 <div className="storage">
                     <img src='icons/crate.svg'/>
-                    <h1>Magazyn Woronicza</h1>
+                    <h1>{props.warehouse.name}</h1>
                     <img src='icons/arrowUp.svg' onClick={(e)=> {
                         if (e.target.style.transform != "rotate(180deg)") {
                             e.target.style.transform = "rotate(180deg)";
@@ -21,36 +27,25 @@ function StorageItem() {
                 </div>
                 <div className='storageDetails'>
                     <br></br>
-                    <div className='favouritedItem'>
-                        <h2>Artykuły biurowe</h2>
-                        <input type="text"/>
-                        <img src='icons/arrowRight.svg'/>
-                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
-                    </div>
-                    <div className='favouritedItem'>
-                        <h2>Artykuły biurowe</h2>
-                        <input type="text"/>
-                        <img src='icons/arrowRight.svg'/>
-                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
-                    </div>
-                    <div className='favouritedItem'>
-                        <h2>Artykuły biurowe</h2>
-                        <input type="text"/>
-                        <img src='icons/arrowRight.svg'/>
-                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
-                    </div>
-                    <div className='favouritedItem'>
-                        <h2>Artykuły biurowe</h2>
-                        <input type="text"/>
-                        <img src='icons/arrowRight.svg'/>
-                        <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
-                    </div>
+                    {items.map((item, index) => (
+                        <div className='favouritedItem' key={index}>
+                            <h2 style={{width: 400 + 'px', fontWeight: 500}}>{item.item.name}</h2>
+                            <input type='text' value={item.quantity}/>
+                            <img src='icons/arrowRight.svg'/>
+                            <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
+                        </div>
+                    ))}
                     <br></br>
                     <table>
                         <tr>
                             <td><h2>+</h2></td>
                             <td><button onClick={()=> {
                                 document.querySelector('.storageInfo').style.left = '361px';
+                                document.querySelector("#warehouse_name").textContent = props.warehouse.name;
+                                document.querySelector("#warehouse_footage").textContent = props.warehouse.square_footage + " m2";
+                                document.querySelector("#warehouse_manager").textContent = props.warehouse.manager_name;
+                                document.querySelector("#warehouse_phone").textContent = props.warehouse.phone;
+                                document.querySelector("#warehouse_address").textContent = props.warehouse.address;
                             }}>info</button></td>
                         </tr>
                     </table>

@@ -4,23 +4,24 @@ import SearchBar from '../components/searchBar';
 import SearchedItem from '../components/searchedItem';
 import StorageInfo from '../components/storageInfo';
 import { getWarehouses } from '../events/warehouses';
-function mainView() {
-    getWarehouses();
+import { useState, useEffect } from 'react';
+function MainView() {
+    const [warehouses, updateWarehouses] = useState([]);
+    useEffect(() => {
+        getWarehouses().then(updateWarehouses);
+    }, []);
+    console.log(warehouses);
     return(
         <div>
-            <button onClick={getWarehouses}>get</button>
             <StorageInfo/>
             <div className="topPanel">
                 <img src="icons/project-logo.svg" alt='logo'/>
                 <h1>Smart Warehouse Management</h1>
             </div>
             <div className='leftPanel'>
-                <StorageItem/>
-                <StorageItem/>
-                <StorageItem/>
-                <StorageItem/>
-                <StorageItem/>
-                <StorageItem/>
+                {warehouses.map((warehouse, index) => (
+                    <StorageItem key={index} warehouse={warehouse} />
+                ))}
             </div>
             <div className='rightPanel'>
                 <SearchBar/>
@@ -34,4 +35,4 @@ function mainView() {
         </div>
     );
 }
-export default mainView
+export default MainView
