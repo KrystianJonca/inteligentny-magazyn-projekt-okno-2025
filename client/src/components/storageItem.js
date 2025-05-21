@@ -31,8 +31,8 @@ function StorageItem(props) {
                         <div className='favouritedItem' key={index}>
                             <h2 style={{width: 400 + 'px', fontWeight: 500}}>{item.item.name}</h2>
                             <input type='text' value={item.quantity}/>
-                            <img src='icons/arrowRight.svg'/>
-                            <img style={{marginRight: "10px"}} src='icons/arrowLeft.svg'/>
+                            <img src='icons/arrowLeft.svg'/>
+                            <img style={{marginRight: "10px"}} src='icons/arrowRight.svg'/>
                         </div>
                     ))}
                     <br></br>
