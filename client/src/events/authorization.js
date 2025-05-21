@@ -16,9 +16,12 @@ async function login(username, password) {
     document.location.reload();
 }
 
-function authorizeRequest(headers) {
+function authorizeRequest() {
+    let headers = {};
     const token = sessionStorage.getItem("swm_token");
     headers.Authorization = `Bearer ${token}`;
+    headers["Content-Type"] = "application/json";
+    return headers;
 }
 
 export {login, authorizeRequest};
