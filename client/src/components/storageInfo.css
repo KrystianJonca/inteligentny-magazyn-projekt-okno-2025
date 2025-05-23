@@ -38,6 +38,10 @@
     width: fit-content;
     vertical-align: middle;
 }
+.generalInfo a {
+    text-decoration: none;
+    color: black;
+}
 .locationInfo {
     display: inline-block;
     vertical-align: text-bottom;

@@ -30,7 +30,7 @@ function StorageItem(props) {
                     {items.map((item, index) => (
                         <div className='favouritedItem' key={index}>
                             <h2 style={{width: 400 + 'px', fontWeight: 500}}>{item.item.name}</h2>
-                            <input type='text' value={item.quantity}/>
+                            <input type='text' defaultValue={item.quantity}/>
                             <img src='icons/arrowLeft.svg'/>
                             <img style={{marginRight: "10px"}} src='icons/arrowRight.svg'/>
                         </div>
@@ -40,12 +40,15 @@ function StorageItem(props) {
                         <tr>
                             <td><h2>+</h2></td>
                             <td><button onClick={()=> {
+                                console.log(props.warehouse)
                                 document.querySelector('.storageInfo').style.left = '361px';
                                 document.querySelector("#warehouse_name").textContent = props.warehouse.name;
                                 document.querySelector("#warehouse_footage").textContent = props.warehouse.square_footage + " m2";
                                 document.querySelector("#warehouse_manager").textContent = props.warehouse.manager_name;
-                                document.querySelector("#warehouse_phone").textContent = props.warehouse.phone;
-                                document.querySelector("#warehouse_address").textContent = props.warehouse.address;
+                                document.querySelector("#warehouse_phone").querySelector("a").textContent = props.warehouse.phone;
+                                document.querySelector("#warehouse_phone").querySelector("a").href = `tel:${props.warehouse.phone}`;
+                                document.querySelector("#warehouse_address").querySelector("a").textContent = props.warehouse.address;
+                                document.querySelector("#warehouse_address").querySelector("a").href = `https://www.google.com/maps?q=${props.warehouse.latitude},${props.warehouse.longitude}`;
                             }}>info</button></td>
                         </tr>
                     </table>

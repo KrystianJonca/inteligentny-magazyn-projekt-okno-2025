@@ -60,8 +60,11 @@
 }
 .listedStorage h3 {
     display: inline-block;
-    width: fit-content;
     vertical-align: middle;
+    width: min-content;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
 }

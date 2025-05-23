@@ -21,7 +21,7 @@ function StorageInfo() {
                 </div>
                 <div>
                     <img src='icons/telephone.svg'/>
-                    <h2 id='warehouse_phone'>Magazyn Zabórek</h2>
+                    <h2 id='warehouse_phone'><a href='tel:'></a></h2>
                 </div>
             </div>
             <div style={{height: "360px", border: "2px solid #90e5d8", width: 0, display: "inline-block", marginTop: "103px"}}></div>
@@ -29,7 +29,7 @@ function StorageInfo() {
                 <img src='icons/dummy.svg'/>
                 <br></br>
                 <img style={{marginTop: "20px"}} src='icons/location.svg'/>
-                <h2 id='warehouse_address'>ul. Mariańskiego 12<br/>02-332 Zaborówek
+                <h2 id='warehouse_address'><a href='' target='_blank'></a>
                 </h2>
             </div>
         </div>

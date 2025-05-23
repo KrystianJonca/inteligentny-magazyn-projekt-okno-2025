@@ -19,7 +19,6 @@ async function getItemsInWarehouse(id) {
         headers: headers,
     })
     let json = await response.json();
-    console.log(json);
     return json;
 }
 

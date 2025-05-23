@@ -5,12 +5,20 @@ import SearchedItem from '../components/searchedItem';
 import StorageInfo from '../components/storageInfo';
 import { getWarehouses } from '../events/warehouses';
 import { useState, useEffect } from 'react';
+import { searchItems } from '../events/items';
 function MainView() {
     const [warehouses, updateWarehouses] = useState([]);
+    const [searchedItems, updateSearchedItems] = useState([]);
     useEffect(() => {
         getWarehouses().then(updateWarehouses);
     }, []);
-    console.log(warehouses);
+
+    const handleSearch = async (event) => {
+        event.preventDefault();
+        const query = event.target.querySelector("input").value;
+        const results = await searchItems(query);
+        updateSearchedItems(results.items);
+    };
     return(
         <div>
             <StorageInfo/>
@@ -24,13 +32,12 @@ function MainView() {
                 ))}
             </div>
             <div className='rightPanel'>
-                <SearchBar/>
-                <SearchedItem/>
-                <SearchedItem/>
-                <SearchedItem/>
-                <SearchedItem/>
-                <SearchedItem/>
-                <SearchedItem/>
+                <form onSubmit={handleSearch}>
+                    <SearchBar/>
+                </form>
+                {searchedItems.map((item, index) => (
+                    <SearchedItem key={index} item={item} />
+                ))}
             </div>
         </div>
     );
