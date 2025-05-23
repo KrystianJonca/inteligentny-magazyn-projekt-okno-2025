@@ -14,6 +14,14 @@ function StorageItem() {
 		setShowDetails(true);
 	}
     }
+	
+    const showInfo = () => {
+    	console.log("SHOW INFO");
+    }
+
+    const addItem = () => {
+    	console.log("ADD ITEM");
+    }
     return (
             <div className="storageWrapper">
                 <div className="storage">
@@ -34,6 +42,8 @@ function StorageItem() {
 		    	<StorageItemDetails name={item.name}/>
 		    )
 		    }
+		    <button onClick={showInfo}>INFO</button>
+		    <div className="storage-details-add-item" onClick={addItem}>+</div>
 	          </div>} 
             </div>
     );

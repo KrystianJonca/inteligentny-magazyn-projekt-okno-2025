@@ -14,7 +14,7 @@ class MoveItemPopup extends React.Component
 			positionTop: 0
 		};
 		this.setPopupSizeAndPosition = this.setPopupSizeAndPosition.bind(this);
-		window.onresize = (event) => this.setPopupSizeAndPosition();
+//		window.onresize = (event) => this.setPopupSizeAndPosition();
 
 	}
 
@@ -40,7 +40,9 @@ class MoveItemPopup extends React.Component
 
 	render(){
 		console.info("Rendering MoveItemPopup with props: %s", this.props.width);
-		return <div className="popup" style={{"height": this.props.height, "width": this.props.width, "right": - this.props.width}}>
+		const right = - (this.props.width + 45);
+		console.log("Right: ", right);
+		return <div className="popup" style={{"height": this.props.height + "px", "width": this.props.width + "px", "right": right + "px"}}>
 			Popup
 			</div>;
 	}

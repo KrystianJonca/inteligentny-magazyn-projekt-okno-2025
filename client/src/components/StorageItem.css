@@ -42,7 +42,6 @@
     padding-right: 20px;
 }
 .storageDetails {
-    overflow: hidden;
     width: 640px;
     outline: 2px solid black;
     padding-left: 20px;
@@ -50,6 +49,8 @@
     padding-top: 20px;
     padding-bottom: 10px;
     margin-right: 10px;
+    display: flex;
+    flex-direction: column;
 }
 .storageDetails table {
     width: 100%;
@@ -58,6 +59,24 @@
     text-align: right;
     width: 50%;
 }
+
+.storageDetails button {
+	align-self: end;
+	padding: 10px;
+	font-size: 20px;
+	margin-top: 10px;
+
+}
+
+.storage-details-add-item {
+	margin-top: 10px;
+	margin-bottom: 10px;	
+}
+
+.favourited-item-wrapper {
+	position: relative;
+}
+
 .favouritedItem {
     padding: 10px;
     border: 1px solid black;
@@ -65,7 +84,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    overflow: visible;
 }
 
 .favouritedItem h2 {
