@@ -5,12 +5,14 @@ function loginView() {
         <>
             <table>
                 <tbody>
-                    <td>Username:</td>
-                    <td><input id="username" type="text" /></td>
-                </tbody>
-                <tbody>
-                    <td>Password:</td>
-                    <td><input id="password" type="password" /></td>
+                    <tr>
+                        <td>Username:</td>
+                        <td><input id="username" type="text" /></td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td><input id="password" type="password" /></td>
+                    </tr>
                 </tbody>
             </table>
             <button onClick={()=> {

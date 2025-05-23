@@ -61,6 +61,13 @@
     text-align: right;
     width: 50%;
 }
+.storageDetails button {
+    background-color: transparent;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 2px solid black;
+}
 .favouritedItem {
     padding: 10px;
     border: 1px solid black;

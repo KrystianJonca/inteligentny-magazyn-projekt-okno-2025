@@ -30,6 +30,7 @@ function MainView() {
                 {warehouses.map((warehouse, index) => (
                     <StorageItem key={index} warehouse={warehouse} />
                 ))}
+                <StorageItem key={-1} warehouse={{name: "+"}} adding/>
             </div>
             <div className='rightPanel'>
                 <form onSubmit={handleSearch}>

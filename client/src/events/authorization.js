@@ -11,6 +11,10 @@ async function login(username, password) {
         },
         body: params.toString(),
     })
+    if (response.status == 401) {
+        document.location.reload();
+        return;
+    }
     const data = await response.json();
     sessionStorage.setItem("swm_token", data.access_token);
     document.location.reload();

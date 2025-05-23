@@ -4,7 +4,6 @@ import { getInventoryByItemID } from '../events/inventory';
 
 function SearchedItem(props) {
     let [inventory, updateInventory] = useState([]);
-    console.log(inventory);
     useEffect(()=> {
         getInventoryByItemID(props.item.item_id).then(updateInventory)
     }, [props.item.item_id]);

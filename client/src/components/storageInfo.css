@@ -9,10 +9,27 @@
     background-color: white;
     z-index: 9999;
 }
+.storageInfo button {
+    background-color: transparent;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 2px solid black;
+}
+.storageInfo table {
+    margin: 0;
+    margin-top: -40px;
+    margin-bottom: -50px;
+    padding: 0;
+    width: 100%;
+}
+.storageInfo td {
+    width: 50%;
+}
 .storageInfo h1 {
     float: right;
     transform: rotate(45deg);
-    font-size: 30px;
+    font-size: 50px;
 }
 .generalInfo {
     margin-top: 103px;
@@ -37,6 +54,18 @@
     display: inline;
     width: fit-content;
     vertical-align: middle;
+}
+.storageInfo input {
+    font-size: larger;
+    margin-left: 10px;
+    display: inline;
+    width: fit-content;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    font-weight: 700;
+    width: 200px;
 }
 .generalInfo a {
     text-decoration: none;

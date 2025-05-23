@@ -7,6 +7,11 @@ async function searchItems(query) {
         mode: "cors",
         headers: headers
     });
+    if (response.status == 401) {
+        sessionStorage.removeItem("swm_token");
+        document.location.reload();
+        return;
+    }
     let json = await response.json();
     return json;
 }
