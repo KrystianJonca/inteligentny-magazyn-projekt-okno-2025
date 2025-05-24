@@ -28,7 +28,8 @@ function StorageItem(props) {
                 <div className="storage">
                     <img src='icons/crate.svg'/>
                     <h1>{props.warehouse.name}</h1>
-                    <img src='icons/arrowUp.svg' onClick={(e)=> {
+                    {!props.adding &&
+                        <img src='icons/arrowUp.svg' onClick={(e)=> {
                         if (e.target.style.transform != "rotate(180deg)") {
                             e.target.style.transform = "rotate(180deg)";
                             e.target.parentNode.parentNode.querySelector(".storageDetails").style.height = "auto";
@@ -40,6 +41,7 @@ function StorageItem(props) {
                             e.target.parentNode.parentNode.style.height = `150px`;
                         }
                     }}/>
+                    }
                 </div>
                 <div className='storageDetails'>
                     <br></br>

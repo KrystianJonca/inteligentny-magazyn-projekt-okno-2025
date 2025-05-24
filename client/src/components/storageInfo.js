@@ -20,13 +20,13 @@ function StorageInfo() {
         data.phone = document.querySelector("#warehouse_phone").value;
         if (method == "PATCH") {
             let warehouse_id = sessionStorage.getItem("warehouse_id");
-            let status = await patchWarehouse(warehouse_id, data)
-            if (status == 200) {
+            let status = await patchWarehouse(warehouse_id, data);
+            if (status == 200 || status == 204) {
                 document.location.reload();
             }
         } else {
-            let status = await createWarehouse(data)
-            if (status == 200) {
+            let status = await createWarehouse(data);
+            if (status == 200 || status == 201) {
                 document.location.reload();
             }
         }
@@ -34,8 +34,8 @@ function StorageInfo() {
 
     const deleteButton = async () => {
         const id = sessionStorage.getItem("warehouse_id");
-        let status = deleteWarehouse(id);
-        if (status == 204) {
+        let status = await deleteWarehouse(id);
+        if (status == 204 || status == 200) {
             document.location.reload();
         }
     };
