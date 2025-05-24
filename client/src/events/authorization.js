@@ -8,6 +8,7 @@ async function login(username, password) {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
+	    "Access-Control-Allow-Origin": "http://localhost"
         },
         body: params.toString(),
     })
@@ -28,4 +29,22 @@ function authorizeRequest() {
     return headers;
 }
 
-export {login, authorizeRequest};
+async function register(username, password){
+    const params = new URLSearchParams();
+    params.append("username", username);
+    params.append("password", password);
+
+    const response = await fetch("http://localhost:8000/auth/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
+    })
+    if( response.status >= 400){
+    	console.log("ERROR");
+    }
+    
+}
+
+export {login, register, authorizeRequest};
