@@ -9,6 +9,7 @@ function StorageItem(props) {
     }, []);
     return (
             <div className='storageWrapper' onClick={()=> {
+                // decides wheter komponent represents actual storage or is just as adding button
                 if(props.adding) {
                     sessionStorage.setItem("storage_info_method", "POST");
                     sessionStorage.setItem("warehouse_id", undefined);
@@ -28,6 +29,7 @@ function StorageItem(props) {
                 <div className="storage">
                     <img src='icons/crate.svg'/>
                     <h1>{props.warehouse.name}</h1>
+                    {/* appearenc will vary based on function */}
                     {!props.adding &&
                         <img src='icons/arrowUp.svg' onClick={(e)=> {
                         if (e.target.style.transform != "rotate(180deg)") {
@@ -45,6 +47,7 @@ function StorageItem(props) {
                 </div>
                 <div className='storageDetails'>
                     <br></br>
+                    {/* loads items present in storage */}
                     {items.map((item, index) => (
                         <div className='favouritedItem' key={index}>
                             <h2 style={{width: 400 + 'px', fontWeight: 500}}>{item.item.name}</h2>
@@ -59,6 +62,7 @@ function StorageItem(props) {
                             <tr>
                                 <td><h2>+</h2></td>
                                 <td><button onClick={()=> {
+                                    // shows info panel with appropriate data
                                     document.querySelector('.storageInfo').style.left = '361px';
                                     document.querySelector("#warehouse_name").value = props.warehouse.name;
                                     document.querySelector("#warehouse_footage").value = props.warehouse.square_footage + " m2";
